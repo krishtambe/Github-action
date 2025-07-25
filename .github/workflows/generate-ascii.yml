@@ -12,9 +12,12 @@ jobs:
         - name: List Repo Files
           run: ls -ltra
 
+        - name: Find ascii-script.sh
+          run: find . -name "ascii-script.sh"
+
         - name: Executing Cowsay Program
           run: |
-              chmod +x ascii-script.sh
-              ./ascii-script.sh
+            chmod +x ascii-script.sh
+            ./ascii-script.sh
           
        
