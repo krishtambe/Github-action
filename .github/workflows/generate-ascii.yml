@@ -15,6 +15,9 @@ jobs:
         - name: Find ascii-script.sh
           run: find . -name "ascii-script.sh"
 
+        - name: Check if ascii-script.sh exists
+          run: test -f ascii-script.sh && echo "Found ascii-script.sh" || echo "ascii-script.sh not found"
+
         - name: Executing Cowsay Program
           run: |
             chmod +x ascii-script.sh
