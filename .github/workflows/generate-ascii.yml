@@ -3,24 +3,36 @@ name: Generate ASCII Artwok
 on:
     push
 jobs:
-    ascii_job:
+    build_job_1:
         runs-on: ubuntu-latest
         steps:
-        - name: Checkout Repo
-          uses: actions/checkout@v4
+        - name: Install cowsay program
+          run: sudo apt install cowsay -y
+        
+        - name: Execute cowsay cmd
+          run: cowsay -f dragon "Run for cover, I am a DRAGON...RAWR" >> dragon.txt
 
-        - name: List Repo Files
-          run: ls -ltra
+        - name: Sleep for 30 seconds
+          run: sleep 30
 
-        - name: Find ascii-script.sh
-          run: find . -name "ascii-script.sh"
+    
+    test_job_2:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Sleep for 10 seconds
+          run: sleep 10
 
-        - name: Check if ascii-script.sh exists
-          run: test -f ascii-script.sh && echo "Found ascii-script.sh" || echo "ascii-script.sh not found"
+        - name: Test file exists
+          run: grep -i "dragon" dragon.txt
 
-        - name: Executing Cowsay Program
-          run: |
-            chmod +x ascii-script.sh
-            ./ascii-script.sh
+    deploy_job_3:
+        runs-on: ubuntu-lates
+        steps:
+        - name: Read file
+          run: cat dragon.txt
+        
+        - name: Deploy
+          run: echo Deploying........
+
           
        
