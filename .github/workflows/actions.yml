@@ -1,4 +1,4 @@
-name: Weekly Acrions Update Check
+name: New Weekly Acrions Update Check
 
 on:
     schedule:
