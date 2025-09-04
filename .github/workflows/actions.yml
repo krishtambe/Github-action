@@ -18,4 +18,5 @@ jobs:
              if actions-up --dry-run | grep -q "→"; then
                 echo "Updates available! Run npx actions-up" to update
                 exit 1
+                echo "hello"
              fi
