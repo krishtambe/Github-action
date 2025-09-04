@@ -5,17 +5,52 @@ on:
       - cron: '*/10 * * * *'
     workflow_dispatch: 
 
+# jobs:
+#     check-update:
+#       runs-on: ubuntu-latest
+#       steps:
+#         - uses: actions/checkout@v3
+#         - uses: actions/setup-node@v3
+#           with:
+#             node-version: '20'
+#         - run: npm install -g actions-up
+#         - run: |
+#              if actions-up --dry-run | grep -q "→"; then
+#                 echo "Updates available! Run npx actions-up" to update
+#                 exit 1
+#              fi
+
 jobs:
-    check-update:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - uses: actions/setup-node@v3
-          with:
-            node-version: '20'
-        - run: npm install -g actions-up
-        - run: |
-             if actions-up --dry-run | grep -q "→"; then
-                echo "Updates available! Run npx actions-up" to update
-                exit 1
-             fi
+  check-actions:
+    name: Check and Update GHA
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Needed to push changes back
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install actions-up
+        run: npm install -g actions-up
+
+      - name: Run actions-up (auto-update)
+        run: |
+          echo "🔍 Scanning workflows and updating GitHub Actions..."
+          npx actions-up
+          
+      - name: Commit and push updates
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .
+            git commit -m "chore: auto-update GitHub Actions with actions-up"
+            git push
+          else
+            echo "✅ No updates needed."
+          fi
